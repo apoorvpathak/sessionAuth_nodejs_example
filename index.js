@@ -38,6 +38,12 @@ app.post('/login', (req, res)=>{
     }
 })
 
+app.get('/logout', (req, res)=>{
+    req.session.destroy();
+    res.clearCookie('session_auth_example')
+    res.redirect('/')
+})
+
 app.listen(3000,()=>{
     console.log('server started on http://localhost:3000')
 })
