@@ -2,6 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import dotenv from 'dotenv';
 
+import {checkLoggedIn, bypassLogin} from './middlewares/middleware.js';
 
 dotenv.config();
 dotenv.config({ path: '.env.example' });
@@ -20,10 +21,10 @@ app.use(session({
 
 app.use(express.urlencoded({extended:false}))
 
-app.get('/', (req, res)=>{
+app.get('/', checkLoggedIn, (req, res)=>{
     res.render('home')
 })
-app.get('/login', (req, res)=>{
+app.get('/login', bypassLogin, (req, res)=>{
     res.render('login', {error:null})
 })
 app.post('/login', (req, res)=>{
