@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import {checkLoggedIn, bypassLogin} from './middlewares/middleware.js';
 
 dotenv.config();
-dotenv.config({ path: '.env.example' });
 
 
 const app = express()
