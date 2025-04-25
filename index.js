@@ -29,14 +29,23 @@ app.get('/', checkLoggedIn, (req, res)=>{
 app.get('/login', bypassLogin, (req, res)=>{
     res.render('login', {error:null})
 })
-app.post('/login', (req, res)=>{
-    //logic to verify user creds
-    if(req.body.username ==='john' && req.body.password === '123'){
-        //create session & store user logged details
-        req.session.user = {id: 1, username: 'john', name: 'John Pork'}
-        res.redirect('/')
+app.post('/login', async (req, res)=>{
+    const { username, password } = req.body;
+    const user = await prisma.user.findUnique({ where: { username } });
+
+    if (user && await bcrypt.compare(password, user.password)) {
+        await prisma.session.create({
+        data: {
+            userId: user.id,
+            sessionId: req.sessionID,
+            data: { username: user.username },
+        },
+        });
+
+        req.session.user = { id: user.id, username: user.username };
+        res.redirect('/');
     } else {
-        res.render('login', {error: 'Wrong Credentials'})
+        res.render('login', { error: 'Invalid credentials' });
     }
 })
 
