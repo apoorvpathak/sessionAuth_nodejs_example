@@ -1,11 +1,14 @@
 import express from 'express';
 import session from 'express-session';
 import dotenv from 'dotenv';
+import { PrismaClient } from '@prisma/client';
 
 import {checkLoggedIn, bypassLogin} from './middlewares/middleware.js';
 
 dotenv.config();
 
+
+const prisma = new PrismaClient();
 
 const app = express()
 
