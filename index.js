@@ -2,7 +2,7 @@ import express from 'express';
 import session from 'express-session';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
-
+import bcrypt from 'bcrypt';
 import {checkLoggedIn, bypassLogin} from './middlewares/middleware.js';
 
 dotenv.config();
@@ -44,6 +44,29 @@ app.get('/logout', (req, res)=>{
     req.session.destroy();
     res.clearCookie('session_auth_example')
     res.redirect('/')
+})
+
+app.get('/register', (req, res)=>{
+    res.render('register', {error: null})
+})
+
+app.post('/register', async (req, res)=>{
+    const { username, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    try {
+        const user = await prisma.user.create({
+            data:{
+                username, email, password: hashedPassword
+            },
+        })
+        req.session.user = { id: user.id, username: user.username };
+        res.redirect('/');
+    } catch (error) {
+        console.error(error);
+        res.render('register', { error: 'User already exists' }); 
+    }
+
 })
 
 app.listen(3000,()=>{

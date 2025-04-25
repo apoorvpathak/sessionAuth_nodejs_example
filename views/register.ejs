@@ -17,5 +17,8 @@
         <input id="password" type="password" name="password">
         <button type="submit">Register</button>
     </form>
+    <% if(error){%>
+        <p><%= error  %></p>
+    <% } %>
 </body>
 </html>
