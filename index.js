@@ -49,10 +49,14 @@ app.post('/login', async (req, res)=>{
     }
 })
 
-app.get('/logout', (req, res)=>{
-    req.session.destroy();
-    res.clearCookie('session_auth_example')
-    res.redirect('/')
+app.get('/logout', async (req, res)=>{
+    if (req.session.user) {
+        await prisma.session.deleteMany({ where: { userId: req.session.user.id } });
+      }
+      req.session.destroy(() => {
+        res.clearCookie('session_auth_example');
+        res.redirect('/');
+      });
 })
 
 app.get('/register', (req, res)=>{
