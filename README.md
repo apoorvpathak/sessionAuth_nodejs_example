@@ -7,6 +7,8 @@
 This is a simple authentication system built with **Express.js**, **Prisma**, **bcrypt**, **express-session**, and **EJS** templating.  
 It allows users to **register**, **login**, **logout**, and **protect routes** based on session authentication.
 
+Read more at [my blog](https://www.apoorvpathak.com/blog/posts/learn-session-auth-expressjs).
+
 ## Features
 
 - User registration with hashed passwords (`bcrypt`)
