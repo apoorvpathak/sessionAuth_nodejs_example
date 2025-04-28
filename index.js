@@ -24,7 +24,7 @@ app.use(session({
 app.use(express.urlencoded({extended:false}))
 
 app.get('/', checkLoggedIn, (req, res)=>{
-    res.render('home')
+    res.render('home', {user: req.session.user.username})
 })
 app.get('/login', bypassLogin, (req, res)=>{
     res.render('login', {error:null})
